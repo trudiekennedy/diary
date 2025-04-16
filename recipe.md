@@ -109,11 +109,6 @@ class DiaryEntry:
         #   Sets the title and artist properties
         pass 
 
-    def format(self):
-        # Returns:
-        #   A string of the form "{title}: {contents}"
-        pass 
-
 
 class PhoneNoExtractor:
     # User-facing properties:
@@ -140,8 +135,9 @@ class ReadableEntry():
         # entries: a list of diary entries that are readable in specified timeframe
         pass
 
-    def extract(self, wpm, mins):
+    def extract(self, diary, wpm, mins):
         # Parameters:
+        # diary: takes an instance of Diary
         # wpm: integer representing the number of words per minute user can read
         # mins: integer representing the number of mins the user has to read
         # Returns:
@@ -201,16 +197,54 @@ combinations that reflect the ways in which the system will be used._
 # EXAMPLE
 
 """
-Given a library
-When we add two tracks
-We see those tracks reflected in the tracks list
+When user adds multiple diary entries
+And user calls #all
+The entries will be listed out in the order they were added
 """
-library = MusicLibrary()
-track_1 = Track("Carte Blanche", "Veracocha")
-track_2 = Track("Synaesthesia", "The Thrillseekers")
-library.add(track_1)
-library.add(track_2)
-library.tracks # => [track_1, track_2]
+diary = Diary()
+entry_1 = DiaryEntry("A cool title", "This is my diary entry")
+entry_2 = DiaryEntry("Another cool title", "These entries are very unimaginative. Is that the best you can do?")
+diary.add(entry_1)
+diary.add(entry_2)
+diary.all() # => [entry_1, entry_2]
+
+"""
+When user adds multiple tasks
+And the user calls #incomplete *without* any being marked complete
+The entries will be listed out
+"""
+task_list = TaskList()
+task_1 = Task("Walk the dog")
+task_2 = Task("Clean the dishes")
+task_list.add(task_1)
+task_list.add(task_2)
+task_list.incomplete() => [task_1, task_2]
+
+"""
+When user adds multiple tasks
+And the user marks one as completed
+When the user calls #incomplete, only the incomplete entries will be listed out
+"""
+task_list = TaskList()
+task_1 = Task("Walk the dog")
+task_2 = Task("Clean the dishes")
+task_list.add(task_1)
+task_list.add(task_2)
+task_1.mark_complete()
+task_list.incomplete() => [task_2]
+
+"""
+When user adds multiple tasks
+And the user marks one as completed
+When the user calls #completed, only the completed entries will be listed out
+"""
+task_list = TaskList()
+task_1 = Task("Walk the dog")
+task_2 = Task("Clean the dishes")
+task_list.add(task_1)
+task_list.add(task_2)
+task_1.mark_complete()
+task_list.completed() => [task_1]
 ```
 
 ## 4. Create Examples as Unit Tests
@@ -219,14 +253,71 @@ _Create examples, where appropriate, of the behaviour of each relevant class at
 a more granular level of detail._
 
 ```python
-# EXAMPLE
+# Diary
+"""
+Initially, diary holds no entries
+"""
+diary = Diary()
+diary.all() # => []
 
 """
-Given a track with a title and an artist
-We see the title reflected in the title property
+When a diary entry is added
+Title and entry will be stored in diary entry
 """
-track = Track("Carte Blanche", "Veracocha")
-track.title # => "Carte Blanche"
+entry = DiaryEntry("My Title", "My Contents")
+entry.title # => "My Title"
+entry.contents # => "My Contents"
+
+# TaskList
+"""
+Initially, tasklist holds no tasks
+"""
+task_list = TaskList()
+task_list.entries => []
+
+"""
+Initially, tasklist holds no incomplete tasks
+"""
+task_list = TaskList()
+task_list.incomplete() => []
+
+"""
+Initially, tasklist holds no complete tasks
+"""
+task_list = TaskList()
+task_list.completed => []
+
+# Task
+"""
+When a task is added
+The to-do will be stored & a False boolean to show it is incomplete
+"""
+task = Task("Clean the dishes")
+task.todo => "Clean the dishes"
+task.completed => False
+
+"""
+When a task is added
+And the user marks it as complete
+The completed boolean will be set to True 
+"""
+task = Task("Walk the dog")
+task.mark_complete()
+task.completed() => True
+
+# PhoneNoExtractor
+"""
+Initially, there will be no phone numbers stored in list
+"""
+numbers = PhoneNoExtractor()
+numbers.numbers => []
+
+# ReadableEntry
+"""
+Initially, there will be no readable entries in the list
+"""
+readable = ReadableEntry()
+readable.entries => []
 ```
 
 _Encode each example as a test. You can add to the above list as you go._
