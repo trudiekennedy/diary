@@ -276,7 +276,7 @@ readable.extract(diary, 1, 5) => None
 """
 Where the diary has no diary entries
 AND the user calls #ReadableEntries with wpm + mins
-An exception is raised
+None is returned
 """
 diary = Diary()
 readable = ReadableEntry()
@@ -311,7 +311,7 @@ numbers.extract(diary) => ["01254 396354"]
 """
 Where the diary has no entries containing phone numbers
 When the user calls PhoneNoExtractor
-An exception is raised
+An empty string is returned
 """
 diary = Diary()
 entry_1 = DiaryEntry("A cool title", "This is my diary entry.")
@@ -319,11 +319,11 @@ entry_2 = DiaryEntry("Another cool title", "My mum is fantastic x 100!")
 diary.add(entry_1)
 diary.add(entry_2)
 numbers = PhoneNoExtractor()
-numbers.extract(diary) => "No phone numbers found in your entries."
+numbers.extract(diary) => "[]"
 """
 Where the diary has no entries
 When the user calls PhoneNoExtractor
-An exception is raised
+An empty string is returned
 """
 diary = Diary()
 numbers = PhoneNoExtractor()
