@@ -280,7 +280,7 @@ An exception is raised
 """
 diary = Diary()
 readable = ReadableEntry()
-readable.extract(diary, 1, 5) => "You've not written any diary entries yet!"
+readable.extract(diary, 1, 5) => None
 
 """
 Where the diary has entries containing phone numbers
